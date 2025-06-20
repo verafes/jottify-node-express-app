@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stories List</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+    <h1>Stories List</h1>
+    <hr />
+    <p id="message"></p>
+    <hr />
+    <div id="logon-register" style="display:none;">
+      <button type="button" id="logon">Logon</button>
+      <button type="button" id="register">Register</button>
+    </div>
+    <div id="logon-div" style="display:none;">
+      <form>
+        <div>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" />
+        </div>
+        <div>
+          <label for="password">Password:</label>
+          <input type="password" id="password" />
+        </div>
+        <button type="button" id="logon-button">Logon</button>
+        <button type="button" id="logon-cancel">Cancel</button>
+      </form>
+    </div>
+    <div id="register-div" style="display:none;">
+      <form>
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" id="name" />
+        </div>
+        <div>
+          <label for="email1">Email:</label>
+          <input type="email" id="email1" name="email" />
+        </div>
+        <div>
+          <label for="password1">Password:</label>
+          <input type="password" id="password1" />
+        </div>
+        <div>
+          <label for="password2">Verify password:</label>
+          <input type="password" id="password2" />
+        </div>
+        <button type="button" id="register-button">register</button>
+        <button type="button" id="register-cancel">cancel</button>
+      </form>
+    </div>
+    <div id="story" style="display:none;">
+      <p id="story-message"></p>
+      <table id="story-table">
+        <tr id="story-table-header">
+          <th>Title</th>
+          <th>Description</th>
+          <th>Tags</th>
+          <th>StoryDate</th>
+          <th>Favorite</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+        <tr>
+          <td>Sample Title</td>
+          <td>Sample description here</td>
+          <td>fun, adventure</td>
+          <td>May 20, 2025</td>
+          <td>✅</td>
+          <td><button class="edit-btn">Edit</button></td>
+          <td><button class="delete-btn">Delete</button></td>
+        </tr>
+      </table>
+      <button type="button" id="add-story">Add story</button>
+      <button type="button" id="logoff">Log off</button>
+    </div>
+    <div id="edit-story" style="display:none;">
+      <form>
+        <div>
+          <label for="storyTitle">Title:</label>
+          <input type="text" id="storyTitle" />
+        </div>
+        <div>
+          <label for="description">Description:</label>
+          <input type="text" id="description" />
+        </div>
+        <div>
+          <label for="tags">Tags (comma separated):</label>
+          <input type="text" id="tags" placeholder="e.g., fun, adventure, memory" />
+          <p id="tag-hints">
+            Suggested tags:
+            <span class="tag-hint">lifestory</span>,
+            <span class="tag-hint">memory</span>,
+            <span class="tag-hint">family</span>,
+            <span class="tag-hint">childhood</span>,
+            <span class="tag-hint">home</span>,
+            <span class="tag-hint">vacation</span>,
+            <span class="tag-hint">travel</span>,
+            <span class="tag-hint">adventure</span>,
+            <span class="tag-hint">dream</span>,
+            <span class="tag-hint">fun</span>,
+            <span class="tag-hint">work</span>,
+            <span class="tag-hint">school</span>,
+            <span class="tag-hint">friends</span>,
+            <span class="tag-hint">pets</span>,
+            <span class="tag-hint">hobby</span>,
+            <span class="tag-hint">inspiring</span>,
+            <span class="tag-hint">celebrate</span>,
+            <span class="tag-hint">achievement</span>
+          </p>
+        </div>
+        <div>
+          <label for="favorite">Favorite:</label>
+          <input type="checkbox" id="favorite" />
+        </div>
+        <div>
+          <label for="story-date">Date:</label>
+          <input type="date" id="story-date" />
+        </div>
+        <button type="button" id="adding-story">add</button>
+        <button type="button" id="edit-cancel">cancel</button>
+      </form>
+    </div>
+    <script src="./index.js" type="module"></script>
+  </body>
+</html>
