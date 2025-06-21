@@ -31,6 +31,7 @@ import { showLoginRegister, handleLoginRegister } from "./loginRegister.js";
 import { handleLogin } from "./login.js";
 import { handleAddEdit } from "./addEdit.js";
 import { handleRegister } from "./register.js";
+import { showAddEdit } from "./addEdit.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   token = localStorage.getItem("token");
@@ -44,5 +45,20 @@ document.addEventListener("DOMContentLoaded", () => {
     showStories();
   } else {
     showLoginRegister();
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const storiesLink = document.getElementById("new-story");
+  
+  if (storiesLink) {
+    storiesLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (token) {
+        showAddEdit(null);
+      } else {
+        message.textContent = "Please log in first.";
+      }
+    });
   }
 });

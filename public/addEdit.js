@@ -125,14 +125,18 @@ export const showAddEdit = async (storyId) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      
       const data = await response.json();
+      // console.log("Fetched storyDate from API:", data.story.storyDate);
       if (response.status === 200) {
         title.value = data.story.title;
         description.value = data.story.description;
         tags.value = data.story.tags;
         isFavorite.checked = data.story.isFavorite;
-        storyDate.value =  data.story.storyDate;
+        // storyDate.value =  data.story.storyDate;
+        storyDate.value = data.story.storyDate
+          ? new Date(data.story.storyDate).toISOString().split('T')[0]
+          : '';
         addingStory.textContent = "update";
         message.textContent = "";
         addEditDiv.dataset.id = storyId;

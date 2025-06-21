@@ -53,30 +53,48 @@ export const showStories = async () => {
     });
 
     const data = await response.json();
-    let children = [storiesTableHeader];
-
+    // let children = [storiesTableHeader];
+    
+    // Get tbody element inside your table
+    const tbody = storiesTable.querySelector('tbody');
+    if (!tbody) {
+      console.error("No <tbody> found inside #story-table");
+      enableInput(true);
+      return;
+    }
+    
+    // Clear tbody before inserting new rows
+    tbody.replaceChildren();
+    
     if (response.status === 200) {
       message.classList.remove("error");
       if (data.count === 0) {
-        storiesTable.replaceChildren(...children); // clear this for safety
+        tbody.replaceChildren(...children);
+        
       } else {
+        let children = [];
         for (let i = 0; i < data.stories.length; i++) {
           let rowEntry = document.createElement("tr");
 
           let editButton = `<td><button type="button" class="editButton" data-id=${data.stories[i]._id}>edit</button></td>`;
           let deleteButton = `<td><button type="button" class="deleteButton" data-id=${data.stories[i]._id}>delete</button></td>`;
           let rowHTML = `
-            <td>${data.stories[i].title}</td>
-            <td>${data.stories[i].description}</td>
-            <td>${data.stories[i].tags}</td>
-            <td>${formatDate(data.stories[i].storyDate)}</td>
-            <td>${data.stories[i].isFavorite ? "✅" : "❌"}</td>
+            <td class="story-title">${data.stories[i].title}</td>
+            <td class="story-description">${data.stories[i].description}</td>
+            <td class="story-tags">${
+              Array.isArray(data.stories[i].tags)
+                ? data.stories[i].tags.join(", ")
+                : data.stories[i].tags
+            }</td>
+            <td class="story-date">${formatDate(data.stories[i].storyDate)}</td>
+            <td class="story-favorite">${data.stories[i].isFavorite ? "Yes" : "No"}</td>
             ${editButton}${deleteButton}`;
 
           rowEntry.innerHTML = rowHTML;
           children.push(rowEntry);
         }
-        storiesTable.replaceChildren(...children);
+        tbody.replaceChildren(...children);
+        
       }
     } else {
       message.textContent = data.msg;
@@ -91,7 +109,13 @@ export const showStories = async () => {
 
 function formatDate(dateString) {
   if (!dateString) return "";
-  const date = new Date(dateString);
+
+  const datePart = dateString.split('T')[0];
+  const [year, month, day] = datePart.split('-').map(Number);
+  
+  if (!year || !month || !day) return "";
+  const date = new Date(year, month - 1, day);
+
   if (isNaN(date)) return "";
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
