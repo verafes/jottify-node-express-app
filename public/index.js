@@ -30,7 +30,7 @@ import { showStories, handleStories } from "./stories.js";
 import { showLoginRegister, handleLoginRegister } from "./loginRegister.js";
 import { handleLogin } from "./login.js";
 import { handleAddEdit } from "./addEdit.js";
-import { handleRegister } from "./register.js";
+import {handleRegister, showRegister} from "./register.js";
 import { showAddEdit } from "./addEdit.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -47,6 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
     showLoginRegister();
   }
 });
+
+const getStarted = document.getElementById("get-started");
+if (getStarted) {
+  getStarted.addEventListener("click", (e) => {
+    e.preventDefault();
+    showRegister();
+  });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const storiesLink = document.getElementById("new-story");

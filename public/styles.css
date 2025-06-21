@@ -22,6 +22,7 @@ h1 {
             5em
     );
     margin-left: clamp(0.2em, 14vw, 20em);
+    margin-bottom: 0;
 }
 
 /* Main Section */
@@ -45,15 +46,24 @@ h1 {
 }
 
 .hero-content {
-    margin-top: clamp(3em, calc(8.5em + 5vw), 25em);
+    margin-top: clamp(3em, calc(10em + 4vw), 15em);
     margin-left: 2em;
     margin-right: 1em;
+
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
 }
 
 .hero-content p {
     font-size: 1.5em;
     color: #7A531AFF;
     margin-left: clamp(0.2em, 14vw, 20em);
+    margin-top: 0;
+}
+
+#get-started{
+    margin-left: clamp(0.1em, 14vw, 40em);
 }
 
 hr {
@@ -129,6 +139,10 @@ nav a {
 a {
     color: inherit;
     text-decoration: none;
+}
+
+#logon-register button{
+    margin-left: 0.25em;
 }
 
 /* Footer */
@@ -219,6 +233,7 @@ button:hover {
 
 #tag-hints {
     margin-top: 0.5rem;
+    margin-bottom: 0;
     font-size: 14px;
 }
 
@@ -299,10 +314,17 @@ td button {
 }
 
 /* Containers */
-#logon-div, #register-div, #story, #edit-story {
-    margin-left: clamp(2em, 5vw, 30em);
-    margin-top: clamp(2em, 5vw, 30em);
+#logon-div, #register-div, #edit-story {
+    margin-left: clamp(2em, 7vw, 30em);
+    margin-top: clamp(2em, 2.5vw, 30em);
     width: fit-content;
+}
+
+#story {
+    max-width: 85vw;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-x: auto;
 }
 
 /* Message Section  */
@@ -319,4 +341,18 @@ td button {
 
 .error {
     color: red;
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 0 1em;
+    }
+
+    header nav ul {
+        flex-wrap: wrap;
+    }
+
+    header nav ul li {
+        margin-left: 10px;
+    }
 }

@@ -53,23 +53,15 @@ export const showStories = async () => {
     });
 
     const data = await response.json();
-    // let children = [storiesTableHeader];
-    
-    // Get tbody element inside your table
-    const tbody = storiesTable.querySelector('tbody');
-    if (!tbody) {
-      console.error("No <tbody> found inside #story-table");
-      enableInput(true);
-      return;
-    }
+    let children = [storiesTableHeader];
     
     // Clear tbody before inserting new rows
-    tbody.replaceChildren();
+    storiesTable.replaceChildren();
     
     if (response.status === 200) {
       message.classList.remove("error");
       if (data.count === 0) {
-        tbody.replaceChildren(...children);
+        storiesTable.replaceChildren(...children);
         
       } else {
         let children = [];
@@ -93,7 +85,7 @@ export const showStories = async () => {
           rowEntry.innerHTML = rowHTML;
           children.push(rowEntry);
         }
-        tbody.replaceChildren(...children);
+        storiesTable.replaceChildren(...children);
         
       }
     } else {
