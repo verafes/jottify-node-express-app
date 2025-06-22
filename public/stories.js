@@ -32,9 +32,11 @@ export const handleStories = () => {
         showDelete(e.target.dataset.id);
       } else if (e.target === logoff) {
         setToken(null);
-        message.textContent = "You have been logged off.";
+        message.textContent = "You have been logged off. Until next time. Your Stories are safe!";
         storiesTable.replaceChildren([storiesTableHeader]);
         showLoginRegister();
+        document.getElementById("get-started")?.style.setProperty("display", "inline-block");
+        document.getElementById("logon-register")?.style.setProperty("display", "flex");
       }
     }
   });
@@ -72,7 +74,7 @@ export const showStories = async () => {
           let deleteButton = `<td><button type="button" class="deleteButton" data-id=${data.stories[i]._id}>delete</button></td>`;
           let rowHTML = `
             <td>
-              <img src="${data.stories[i].imageUrl || 'img/default.png'}" alt="story image" style="max-height: 50px;" />
+              <img src="${data.stories[i].imageUrl || 'img/default.png'}" alt="Thumbnail" />
             </td>
             <td class="story-title">${data.stories[i].title}</td>
             <td class="story-description">${data.stories[i].description}</td>

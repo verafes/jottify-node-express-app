@@ -8,6 +8,7 @@ import {
 } from "./index.js";
 import { showLoginRegister } from "./loginRegister.js";
 import { showStories } from "./stories.js";
+import { showRegister } from "./register.js";
 
 let loginDiv = null;
 let email = null;
@@ -19,6 +20,8 @@ export const handleLogin = () => {
   password = document.getElementById("password");
   const logonButton = document.getElementById("logon-button");
   const logonCancel = document.getElementById("logon-cancel");
+  const logonLink = document.getElementById("logon-link");
+  const registerLink = document.getElementById("register-link");
 
   loginDiv.addEventListener("click", async (e) => {
     if (inputEnabled && e.target.nodeName === "BUTTON") {
@@ -40,9 +43,12 @@ export const handleLogin = () => {
           const data = await response.json();
           if (response.status === 200) {
             message.classList.remove("error");
-            message.textContent = `Logon successful. Welcome ${data.user.name}`;
+            message.textContent = `Login successful. Welcome back ${data.user.name}`;
             setToken(data.token);
-
+            
+            document.getElementById("get-started")?.style.setProperty("display", "none");
+            document.getElementById("logon-register")?.style.setProperty("display", "none");
+            
             email.value = "";
             password.value = "";
 
@@ -64,6 +70,20 @@ export const handleLogin = () => {
       }
     }
   });
+  
+  if (logonLink) {
+    logonLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      showLogin();
+    });
+  }
+
+  if (registerLink) {
+    registerLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      showRegister();
+    });
+  }
 };
 
 export const showLogin = () => {

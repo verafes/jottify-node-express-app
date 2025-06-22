@@ -50,7 +50,10 @@ export const handleRegister = () => {
               message.classList.remove("error");
               message.textContent = `Registration successful.  Welcome ${data.user.name}`;
               setToken(data.token);
-
+              
+              document.getElementById("get-started")?.style.setProperty("display", "inline-block");
+              document.getElementById("logon-register")?.style.setProperty("display", "flex");
+              
               name.value = "";
               email1.value = "";
               password1.value = "";

@@ -19,7 +19,7 @@
       <div class="container">
         <div class="logo">
           <img src="./img/logo_light.png" alt="Logo" />
-          <a href="/">Jottify</a>
+          <a href="/">JOTTIFY: Jot your joy</a>
         </div>
         <nav>
           <ul>
@@ -28,7 +28,7 @@
             <li><a href="#about" >About</a></li>
             <li>
               <div id="logon-register" style="display:none;">
-                <button type="button" id="logon">Logon</button>
+                <button type="button" id="logon">Login</button>
                 <button type="button" id="register">Register</button>
               </div>
             </li>
@@ -42,13 +42,14 @@
     <main class="main-content">
       <div class="hero-content">
         <h1>Welcome to Jottify</h1>
-        <div class="inner-content"></div>
+        <div class="inner-content">
           <p>Turn<br> your thoughts<br> into jots.</p>
           <button type="button" id="get-started">Get Started</button>
         </div>
       </div>
       <div id="logon-div" style="display:none;">
         <form>
+          <h3>Sign Up to Share Your Joy</h3>
           <div>
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" />
@@ -57,12 +58,18 @@
             <label for="password">Password:</label>
             <input type="password" id="password" />
           </div>
-          <button type="button" id="logon-button">Logon</button>
-          <button type="button" id="logon-cancel">Cancel</button>
+          <div class="form-actions">
+            <button type="button" id="logon-button">Login</button>
+            <button type="button" id="logon-cancel">Cancel</button>
+          </div>
+          <p>Do not have an account?
+            <a href="#" id="register-link">Register</a>
+          </p>
         </form>
       </div>
       <div id="register-div" style="display:none;">
         <form>
+          <h3>Log In to Your Joyful Stories</h3>
           <div>
             <label for="name">Name:</label>
             <input type="text" id="name" />
@@ -79,13 +86,19 @@
             <label for="password2">Verify password:</label>
             <input type="password" id="password2" />
           </div>
-          <button type="button" id="register-button">register</button>
-          <button type="button" id="register-cancel">cancel</button>
+          <div class="form-actions">
+            <button type="button" id="register-button">register</button>
+            <button type="button" id="register-cancel">cancel</button>
+          </div>
+          <p>Already have an account?
+            <a href="#" id="logon-link">Login</a>
+          </p>
         </form>
       </div>
       <div id="story" style="display:none;">
         <p id="story-message"></p>
         <table id="story-table">
+          <h3>Your Personal Story Collection</h3>
           <thead>
             <tr id="story-table-header">
               <th class="story-title">Title</th>
@@ -115,6 +128,7 @@
 
       <div id="edit-story" style="display:none;">
         <form>
+          <h3>Write Your Story</h3>
           <div class="image-column">
             <label for="imageUpload">Story Image:</label>
             <input type="file" id="imageUpload" accept="image/*" />
@@ -125,16 +139,6 @@
                 <button type="button" id="editImageBtn">Edit</button>
                 <button type="button" id="deleteImageBtn">Delete</button>
               </div>
-            </div>
-          </div>
-          <div class="form-column">
-            <div>
-              <label for="storyTitle">Title:</label>
-              <input type="text" id="storyTitle" />
-            </div>
-            <div>
-              <label for="description">Description:</label>
-              <input type="text" id="description" />
             </div>
             <div>
               <label for="tags">Tags (comma separated):</label>
@@ -156,12 +160,22 @@
                 <span class="tag-hint">friends</span>,
                 <span class="tag-hint">pets</span>,
                 <span class="tag-hint">hobby</span>,
+                <span class="tag-hint">health</span>,
                 <span class="tag-hint">inspiring</span>,
                 <span class="tag-hint">celebrate</span>,
                 <span class="tag-hint">achievement</span>
               </p>
             </div>
-
+          </div>
+          <div class="form-column">
+            <div>
+              <label for="storyTitle">Title:</label>
+              <input type="text" id="storyTitle" />
+            </div>
+            <div>
+              <label for="description">Description:</label>
+              <textarea id="description" rows="9" placeholder="Write your story here..."></textarea>
+            </div>
             <div>
               <label for="favorite">Favorite:</label>
               <input type="checkbox" id="favorite" />
@@ -171,8 +185,8 @@
               <input type="date" id="story-date" />
             </div>
             <div class="form-actions">
-            <button type="button" id="adding-story">add</button>
-            <button type="button" id="edit-cancel">cancel</button>
+              <button type="button" id="adding-story">add</button>
+              <button type="button" id="edit-cancel">cancel</button>
             </div>
           </div>
         </form>

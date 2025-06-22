@@ -41,20 +41,23 @@ document.addEventListener("DOMContentLoaded", () => {
   handleStories();
   handleRegister();
   handleAddEdit();
+  
+  const getStarted = document.getElementById("get-started");
+  if (getStarted) {
+    getStarted.addEventListener("click", (e) => {
+      e.preventDefault();
+      showRegister();
+    });
+  }
+  
   if (token) {
+    if (getStarted) getStarted.style.display = "none";
     showStories();
   } else {
+    if (getStarted) getStarted.style.display = "inline-block";
     showLoginRegister();
   }
 });
-
-const getStarted = document.getElementById("get-started");
-if (getStarted) {
-  getStarted.addEventListener("click", (e) => {
-    e.preventDefault();
-    showRegister();
-  });
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   const storiesLink = document.getElementById("new-story");

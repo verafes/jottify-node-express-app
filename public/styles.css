@@ -15,6 +15,7 @@ header, footer {
 
 h1 {
     text-align: left;
+    text-align: left;
     color: #4d21bd;
     font-size: clamp(
             2.5em,
@@ -23,6 +24,11 @@ h1 {
     );
     margin-left: clamp(0.2em, 14vw, 20em);
     margin-bottom: 0;
+}
+
+h3 {
+    margin: 0;
+    color: #A37123FF;
 }
 
 /* Main Section */
@@ -76,6 +82,13 @@ hr {
 a {
     color: inherit;
     text-decoration: none;
+}
+
+input,
+textarea,
+select,
+button {
+    font-family: inherit;
 }
 
 /* Header */
@@ -172,10 +185,11 @@ form {
     flex-direction: column;
     gap: 12px;
     background-color: #fff;
-    padding: 0.5rem;
+    padding: 0.5rem 0.7rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    max-width: 400px;
+    max-width: 25rem;
+    /*max-width: min(90vw, 25rem);*/
     margin-bottom: 1rem;
 }
 
@@ -209,6 +223,22 @@ input:focus {
     border-color: #5227c3;
     outline: none;
 }
+
+textarea {
+    padding: 8px;
+    border: 1px solid #C99A5AFF;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+textarea:focus {
+    border-color: #5227c3;
+    outline: none;
+}
+
 /* Buttons */
 button {
     padding: 8px 16px;
@@ -330,36 +360,55 @@ td button {
 #edit-story form {
     display: flex;
     flex-direction: row;
-    gap: 2rem;
+    flex-wrap: wrap;
+    gap: 0 2rem;
     align-items: flex-start;
-    /*flex-wrap: wrap;*/
     width: 100%;
-    max-width: 900px;
+    max-width: min(56.25rem, 100% - 2rem);
 }
 
-/* Add/Update and Cancel */
+#edit-story form h3 {
+    width: 100%;
+    color: #A37123FF;
+    margin: 0 0 0.5rem 0;
+}
+
+#logon-div p, #register-div p {
+    margin: 0;
+}
+
+#logon-link,
+#register-link {
+    color: #0066cc; !important;
+    text-decoration: underline; !important;
+}
+
+/* Add/Update and Cancel buttons */
 .form-actions {
     display: flex;
-    gap: 10px;
-    /*margin-top: 1rem; */
+    gap: 0.6em;
 }
 
 /* Image */
 .image-preview-container {
     position: relative;
-    max-width: 250px;
-    margin-top: 0.5rem;
+    max-width: 20vw;
+    width: 100%;
 }
 
 .image-column {
     flex: 1;
-    min-width: 250px;
-    max-width: 300px;
+    min-width: 14rem;
+    max-width: 20vw;
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-column {
     flex: 2;
-    min-width: 300px;
+    min-width: 20rem;
+    max-width: 70vw;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -390,6 +439,7 @@ td button {
     flex-wrap: wrap;
     gap: 5px;
     pointer-events: none;
+    max-width: calc(100% - 16px);
 }
 
 .image-tags span {
@@ -401,16 +451,26 @@ td button {
 }
 
 .image-buttons {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
     display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+    gap: 8px;
 }
 
 .image-buttons button {
-    padding: 0.25rem 0.5rem;
+    padding: 0.2rem 0.5rem 0.3rem 0.5rem;
     font-size: 0.8rem;
 }
 
+td img {
+    width: 40px;
+    height: 50px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    margin: 0 auto;
+}
 
 /* Message Section  */
 #message, #story-message {
@@ -428,6 +488,22 @@ td button {
     color: red;
 }
 
+@media (max-width: 750px) {
+    #edit-story {
+        margin-right: clamp(1em, 3vw, 2em);
+        width: auto;
+    }
+    #edit-story form {
+        flex-direction: column;
+        max-width: calc(100% - 2em);
+
+    }
+    .form-column,
+    .image-column {
+        max-width: 100%;
+        min-width: 100%;
+    }
+}
 @media (max-width: 600px) {
     header {
         padding: 0 1em;
@@ -439,5 +515,15 @@ td button {
 
     header nav ul li {
         margin-left: 10px;
+    }
+
+    #edit-story form {
+        flex-direction: column;
+    }
+
+    .form-column,
+    .image-column {
+        max-width: 100%; !important;
+        min-width: 100%; !important;
     }
 }

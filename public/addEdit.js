@@ -27,7 +27,8 @@ export const handleAddEdit = async () => {
   const tagHintsContainer = document.getElementById("tag-hints");
   const deleteImageBtn = document.getElementById("deleteImageBtn");
   const editImageBtn = document.getElementById("editImageBtn");
-
+  const imagePreview = document.getElementById("imagePreview");
+  
   addEditDiv.addEventListener("click", async (e) => {
     if (inputEnabled && e.target.nodeName === "BUTTON") {
       if (e.target === addingStory) {
@@ -97,8 +98,8 @@ export const handleAddEdit = async () => {
             isFavorite.checked = false;
             storyDate.value = "";
             addEditDiv.dataset.id = "";
-            document.getElementById("imagePreview").src = "";
-            document.getElementById("imagePreview").style.display = "none";
+            imagePreview.src = "";
+            imagePreview.style.display = "none";
             imageUrl = "";
             
             showStories();
@@ -122,7 +123,6 @@ export const handleAddEdit = async () => {
     }
   });
   
-  // const tagHintsContainer = document.getElementById("tag-hints");
   if (tagHintsContainer) {
     tagHintsContainer?.addEventListener("click", (e) => {
       if (e.target.classList.contains("tag-hint")) {
@@ -142,8 +142,8 @@ export const handleAddEdit = async () => {
     // Clear image and preview
     deleteImageBtn?.addEventListener("click", () => {
       document.getElementById("imageUpload").value = "";
-      document.getElementById("imagePreview").src = "";
-      document.getElementById("imagePreview").style.display = "none";
+      imagePreview.src = "";
+      imagePreview.style.display = "none";
       imageTags.innerHTML = "";
     });
 
@@ -166,8 +166,8 @@ export const showAddEdit = async (storyId) => {
     message.textContent = "";
     uploadedImageUrl = "";
     
-    document.getElementById("imagePreview").src = "";
-    document.getElementById("imagePreview").style.display = "none";
+    imagePreview.src = "";
+    imagePreview.style.display = "none";
     
     setDiv(addEditDiv);
     // Set up preview every time
