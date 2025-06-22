@@ -71,6 +71,9 @@ export const showStories = async () => {
           let editButton = `<td><button type="button" class="editButton" data-id=${data.stories[i]._id}>edit</button></td>`;
           let deleteButton = `<td><button type="button" class="deleteButton" data-id=${data.stories[i]._id}>delete</button></td>`;
           let rowHTML = `
+            <td>
+              <img src="${data.stories[i].imageUrl || 'img/default.png'}" alt="story image" style="max-height: 50px;" />
+            </td>
             <td class="story-title">${data.stories[i].title}</td>
             <td class="story-description">${data.stories[i].description}</td>
             <td class="story-tags">${
@@ -92,7 +95,7 @@ export const showStories = async () => {
       message.textContent = data.msg;
     }
   } catch (err) {
-    console.log(err);
+    console.warn(err);
     message.textContent = "A communication error occurred.";
   }
   enableInput(true);

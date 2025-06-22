@@ -327,6 +327,91 @@ td button {
     overflow-x: auto;
 }
 
+#edit-story form {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+    /*flex-wrap: wrap;*/
+    width: 100%;
+    max-width: 900px;
+}
+
+/* Add/Update and Cancel */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    /*margin-top: 1rem; */
+}
+
+/* Image */
+.image-preview-container {
+    position: relative;
+    max-width: 250px;
+    margin-top: 0.5rem;
+}
+
+.image-column {
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+}
+
+.form-column {
+    flex: 2;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#edit-story .form-column > div {
+    margin: 0;
+    width: 100%;
+}
+
+#edit-story label {
+    margin-bottom: 2px;
+}
+
+#imagePreview {
+    width: 100%;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    object-fit: contain;
+    display: block;
+}
+
+.image-tags {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    pointer-events: none;
+}
+
+.image-tags span {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #444;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    border-radius: 4px;
+}
+
+.image-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.image-buttons button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+
 /* Message Section  */
 #message, #story-message {
     font-size: 16px;

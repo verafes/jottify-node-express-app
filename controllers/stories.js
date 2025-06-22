@@ -1,3 +1,5 @@
+const streamifier = require("streamifier");
+const cloudinary = require('../db/cloudinaryConfig');
 const Story = require("../models/Story");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
@@ -22,6 +24,41 @@ const getStoryById = async (req, res) => {
     throw new NotFoundError(`No story with id: ${storyId}`);
   }
   res.status(StatusCodes.OK).json({ story });
+};
+
+const uploadStoryImage = async (req, res) => {
+  if (!req.file) {
+    throw new BadRequestError("No file uploaded");
+  }
+  const storyImage = req.file;
+  if (!storyImage.mimetype.startsWith("image")) {
+    throw new BadRequestError("Please upload image");
+  }
+  const maxSize = 1024 * 1024;
+  if (storyImage.size > maxSize) {
+    throw new BadRequestError("Please upload image smaller than 1MB");
+  }
+  
+  const streamUpload = () => {
+    return new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream((error, result) => {
+        if (result) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      });
+      streamifier.createReadStream(storyImage.buffer).pipe(stream);
+    });
+  };
+  
+  try {
+    const result = await streamUpload();
+    res.status(StatusCodes.OK).json({ image: result.secure_url });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
 };
 
 const createStory = async (req, res) => {
@@ -79,4 +116,5 @@ module.exports = {
   createStory,
   updateStory,
   deleteStory,
+  uploadStoryImage,
 };

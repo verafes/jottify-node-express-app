@@ -8,8 +8,9 @@ let tags = null;
 let isFavorite = null;
 let addingStory = null;
 let storyDate = null;
+let uploadedImageUrl = null;
 
-export const handleAddEdit = () => {
+export const handleAddEdit = async () => {
   addEditDiv = document.getElementById("edit-story");
   title = document.getElementById("storyTitle");
   description = document.getElementById("description");
@@ -18,6 +19,14 @@ export const handleAddEdit = () => {
   storyDate = document.getElementById("story-date");
   addingStory = document.getElementById("adding-story");
   const editCancel = document.getElementById("edit-cancel");
+  
+  const imageInput = document.getElementById("imageUpload");
+  let imageUrl = "";
+  
+  const imageTags = document.getElementById("imageTags");
+  const tagHintsContainer = document.getElementById("tag-hints");
+  const deleteImageBtn = document.getElementById("deleteImageBtn");
+  const editImageBtn = document.getElementById("editImageBtn");
 
   addEditDiv.addEventListener("click", async (e) => {
     if (inputEnabled && e.target.nodeName === "BUTTON") {
@@ -33,6 +42,28 @@ export const handleAddEdit = () => {
           url = `/api/v1/stories/${storyId}`;
         }
 
+        if (imageInput && imageInput.files.length > 0) {
+          const formData = new FormData();
+          formData.append("image", imageInput.files[0]);
+          
+          try {
+            const imgRes = await fetch("/api/v1/stories/upload", {
+              method: "POST",
+              headers: {Authorization: `Bearer ${token}`},
+              body: formData,
+            });
+            
+            const imgData = await imgRes.json();
+            imageUrl = imgData.image || "";
+            uploadedImageUrl = imageUrl;
+          } catch (err) {
+            console.error("Image upload failed:", err);
+            //Fall back to empty if upload failed
+            imageUrl = "";
+            uploadedImageUrl = "";
+          }
+        }
+        
         try {
           const response = await fetch(url, {
             method: method,
@@ -44,8 +75,9 @@ export const handleAddEdit = () => {
               title: title.value,
               description: description.value,
               tags: tags.value,
-              isFavorite: isFavorite.checked, // not required
+              isFavorite: isFavorite.checked,
               storyDate: storyDate.value,
+              imageUrl: uploadedImageUrl,
             }),
           });
 
@@ -65,6 +97,9 @@ export const handleAddEdit = () => {
             isFavorite.checked = false;
             storyDate.value = "";
             addEditDiv.dataset.id = "";
+            document.getElementById("imagePreview").src = "";
+            document.getElementById("imagePreview").style.display = "none";
+            imageUrl = "";
             
             showStories();
           } else {
@@ -76,7 +111,7 @@ export const handleAddEdit = () => {
           message.textContent = "A communication error occurred.";
           message.classList.add("error");
         }
-
+        
         enableInput(true);
       } else if (e.target === editCancel) {
         addEditDiv.dataset.id = ""; // Clear ID on cancel
@@ -87,9 +122,9 @@ export const handleAddEdit = () => {
     }
   });
   
-  const tagHintsContainer = document.getElementById("tag-hints");
+  // const tagHintsContainer = document.getElementById("tag-hints");
   if (tagHintsContainer) {
-    tagHintsContainer.addEventListener("click", (e) => {
+    tagHintsContainer?.addEventListener("click", (e) => {
       if (e.target.classList.contains("tag-hint")) {
         const clickedTag = e.target.textContent.trim();
         const currentTags = tags.value.split(",").map(t => t.trim()).filter(t => t);
@@ -97,7 +132,24 @@ export const handleAddEdit = () => {
           currentTags.push(clickedTag);
           tags.value = currentTags.join(", ");
         }
+        // tag on image
+        const tagSpan = document.createElement("span");
+        tagSpan.textContent = clickedTag;
+        imageTags.appendChild(tagSpan);
       }
+    });
+    
+    // Clear image and preview
+    deleteImageBtn?.addEventListener("click", () => {
+      document.getElementById("imageUpload").value = "";
+      document.getElementById("imagePreview").src = "";
+      document.getElementById("imagePreview").style.display = "none";
+      imageTags.innerHTML = "";
+    });
+
+    // Reopen image input
+    editImageBtn?.addEventListener("click", () => {
+      document.getElementById("imageUpload").click();
     });
   }
 };
@@ -112,8 +164,14 @@ export const showAddEdit = async (storyId) => {
     addingStory.textContent = "Add Story";
     addEditDiv.dataset.id = "";
     message.textContent = "";
-
+    uploadedImageUrl = "";
+    
+    document.getElementById("imagePreview").src = "";
+    document.getElementById("imagePreview").style.display = "none";
+    
     setDiv(addEditDiv);
+    // Set up preview every time
+    handleImagePreview();
   } else {
     enableInput(false);
 
@@ -127,21 +185,31 @@ export const showAddEdit = async (storyId) => {
       });
       
       const data = await response.json();
-      // console.log("Fetched storyDate from API:", data.story.storyDate);
+
       if (response.status === 200) {
         title.value = data.story.title;
         description.value = data.story.description;
         tags.value = data.story.tags;
         isFavorite.checked = data.story.isFavorite;
-        // storyDate.value =  data.story.storyDate;
         storyDate.value = data.story.storyDate
           ? new Date(data.story.storyDate).toISOString().split('T')[0]
           : '';
         addingStory.textContent = "update";
         message.textContent = "";
         addEditDiv.dataset.id = storyId;
-
+        
+        // If story has an imageUrl, show it in preview
+        const preview = document.getElementById("imagePreview");
+        if (data.story.imageUrl) {
+          preview.src = data.story.imageUrl;
+          preview.style.display = "block";
+        } else {
+          preview.src = "img/default.png";
+          preview.style.display = "block";
+        }
+        
         setDiv(addEditDiv);
+        handleImagePreview();
       } else {
         message.textContent = "The story entry was not found";
         message.classList.add("error");
@@ -174,7 +242,6 @@ export const showDelete = async (storyId) => {
       message.textContent = data.msg;
       showStories();
     } else {
-      // might happen if the list has been updated since last display
       message.textContent = "The story entry was not found";
       showStories();
     }
@@ -184,4 +251,35 @@ export const showDelete = async (storyId) => {
     showStories();
   }
   enableInput(true);
+};
+
+
+export const handleImagePreview = () => {
+  const imageInput = document.getElementById("imageUpload");
+  const imagePreview = document.getElementById("imagePreview");
+  
+  if (!imageInput || !imagePreview) {
+    console.warn("Image input or preview element not found.");
+    return;
+  }
+  
+  // Prevent auto-showing broken preview when src is empty
+  if (imagePreview.src && imagePreview.src.startsWith("http")) {
+    imagePreview.style.display = "block";
+  }
+  
+  imageInput.addEventListener("change", () => {
+    const file = imageInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        imagePreview.src = e.target.result;
+        imagePreview.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    } else {
+      imagePreview.src = "";
+      imagePreview.style.display = "none";
+    }
+  });
 };

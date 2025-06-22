@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Security-Policy" content="img-src 'self' data: https://res.cloudinary.com;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jottify - My Stories</title>
     <link rel="stylesheet" href="styles.css">
@@ -90,10 +91,10 @@
               <th class="story-title">Title</th>
               <th class="story-description">Description</th>
               <th class="story-tags">Tags</th>
-              <th>StoryDate</th>
-              <th>Favorite</th>
-              <th>Edit</th>
-              <th>Delete</th>
+              <th class="story-date">StoryDate</th>
+              <th class="favorite">Favorite</th>
+              <th class="edit-btn">Edit</th>
+              <th class="edit-btn">Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -101,10 +102,10 @@
               <td class="story-title">Sample Title</td>
               <td class="story-description">Sample description here</td>
               <td class="story-tags">fun, adventure</td>
-              <td>May 20, 2025</td>
-              <td>Yes</td>
+              <td class="story-date">May 20, 2025</td>
+              <td class="favorite">Yes</td>
               <td><button class="edit-btn">Edit</button></td>
-              <td><button class="delete-btn">Delete</button></td>
+              <td><button class="edit-btn">Delete</button></td>
             </tr>
           </tbody>
         </table>
@@ -114,50 +115,66 @@
 
       <div id="edit-story" style="display:none;">
         <form>
-          <div>
-            <label for="storyTitle">Title:</label>
-            <input type="text" id="storyTitle" />
+          <div class="image-column">
+            <label for="imageUpload">Story Image:</label>
+            <input type="file" id="imageUpload" accept="image/*" />
+            <div class="image-preview-container">
+              <img id="imagePreview" alt="Preview" />
+              <div class="image-tags" id="imageTags"></div>
+              <div class="image-buttons">
+                <button type="button" id="editImageBtn">Edit</button>
+                <button type="button" id="deleteImageBtn">Delete</button>
+              </div>
+            </div>
           </div>
-          <div>
-            <label for="description">Description:</label>
-            <input type="text" id="description" />
-          </div>
-          <div>
-            <label for="tags">Tags (comma separated):</label>
-            <input type="text" id="tags" placeholder="e.g., fun, adventure, memory" />
-            <p id="tag-hints">
-              Suggested tags:
-              <span class="tag-hint">lifestory</span>,
-              <span class="tag-hint">memory</span>,
-              <span class="tag-hint">family</span>,
-              <span class="tag-hint">childhood</span>,
-              <span class="tag-hint">home</span>,
-              <span class="tag-hint">vacation</span>,
-              <span class="tag-hint">travel</span>,
-              <span class="tag-hint">adventure</span>,
-              <span class="tag-hint">dream</span>,
-              <span class="tag-hint">fun</span>,
-              <span class="tag-hint">work</span>,
-              <span class="tag-hint">school</span>,
-              <span class="tag-hint">friends</span>,
-              <span class="tag-hint">pets</span>,
-              <span class="tag-hint">hobby</span>,
-              <span class="tag-hint">inspiring</span>,
-              <span class="tag-hint">celebrate</span>,
-              <span class="tag-hint">achievement</span>
-            </p>
-          </div>
+          <div class="form-column">
+            <div>
+              <label for="storyTitle">Title:</label>
+              <input type="text" id="storyTitle" />
+            </div>
+            <div>
+              <label for="description">Description:</label>
+              <input type="text" id="description" />
+            </div>
+            <div>
+              <label for="tags">Tags (comma separated):</label>
+              <input type="text" id="tags" placeholder="e.g., fun, adventure, memory" />
+              <p id="tag-hints">
+                Suggested tags:
+                <span class="tag-hint">lifestory</span>,
+                <span class="tag-hint">memory</span>,
+                <span class="tag-hint">family</span>,
+                <span class="tag-hint">childhood</span>,
+                <span class="tag-hint">home</span>,
+                <span class="tag-hint">vacation</span>,
+                <span class="tag-hint">travel</span>,
+                <span class="tag-hint">adventure</span>,
+                <span class="tag-hint">dream</span>,
+                <span class="tag-hint">fun</span>,
+                <span class="tag-hint">work</span>,
+                <span class="tag-hint">school</span>,
+                <span class="tag-hint">friends</span>,
+                <span class="tag-hint">pets</span>,
+                <span class="tag-hint">hobby</span>,
+                <span class="tag-hint">inspiring</span>,
+                <span class="tag-hint">celebrate</span>,
+                <span class="tag-hint">achievement</span>
+              </p>
+            </div>
 
-          <div>
-            <label for="favorite">Favorite:</label>
-            <input type="checkbox" id="favorite" />
+            <div>
+              <label for="favorite">Favorite:</label>
+              <input type="checkbox" id="favorite" />
+            </div>
+            <div>
+              <label for="story-date">Date:</label>
+              <input type="date" id="story-date" />
+            </div>
+            <div class="form-actions">
+            <button type="button" id="adding-story">add</button>
+            <button type="button" id="edit-cancel">cancel</button>
+            </div>
           </div>
-          <div>
-            <label for="story-date">Date:</label>
-            <input type="date" id="story-date" />
-          </div>
-          <button type="button" id="adding-story">add</button>
-          <button type="button" id="edit-cancel">cancel</button>
         </form>
       </div>
     </main>

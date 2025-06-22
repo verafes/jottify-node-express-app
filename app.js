@@ -26,13 +26,23 @@ const app = express();
 app.use(express.json());
 app.set("trust proxy", 1);
 
-// app.use(
-//   rateLimiter({
-//     windowMs: 15 * 60 * 1000,
-//     limit: 100,
-//   })
-// );
-app.use(helmet());
+app.use(
+  rateLimiter({
+    windowMs: 15 * 60 * 1000,
+    limit: 100,
+  })
+);
+// app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    useDefaults: true,
+    directives: {
+      "img-src": ["'self'", "data:", "https://res.cloudinary.com"],
+      "style-src": ["'self'", "https://cdnjs.cloudflare.com", "'unsafe-inline'"],
+      "script-src": ["'self'", "https://cdnjs.cloudflare.com"],
+    },
+  })
+);
 app.use(cors());
 app.use(xss());
 
