@@ -98,15 +98,27 @@
       <div id="story" style="display:none;">
         <p id="story-message"></p>
 
-        <!-- View toggle buttons -->
-        <div class="view-toggle">
-          <a href="#" id="card-view-btn"  class="tab-link">Card View</a>
-          <a href="#" id="table-view-btn" class="tab-link active">Table View</a>
-        </div>
-          <h3>Your Personal Story Collection</h3>
-          <div id="stories-grid">
-            <!-- cards will go here -->
+        <div class="top-controls">
+          <!-- View toggle buttons -->
+          <div class="view-toggle">
+            <a href="#" id="card-view-btn"  class="tab-link">Card View</a>
+            <a href="#" id="table-view-btn" class="tab-link active">Table View</a>
           </div>
+          <div class="sort-container" style="margin: 10px 0;">
+            <label for="sort-select">Sort by:</label>
+            <select id="sort-select">
+              <option value="date-desc">Newest First</option>
+              <option value="date-asc">Oldest First</option>
+              <option value="title-asc">Title A–Z</option>
+              <option value="title-desc">Title Z–A</option>
+            </select>
+          </div>
+        </div>
+
+        <h3>Your Personal Story Collection</h3>
+        <div id="stories-grid">
+          <!-- cards will go here -->
+        </div>
 
         <table id="story-table">
           <thead>

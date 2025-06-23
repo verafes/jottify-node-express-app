@@ -41,6 +41,21 @@ export const handleStories = () => {
     storiesContainer.style.display = "grid";
   });
   
+  // Sort dropdown
+  const sortSelect = document.getElementById("sort-select");
+  if (sortSelect) {
+    sortSelect.addEventListener("change", (e) => {
+      const [sortBy, order] = e.target.value.split("-");
+      // Reset to first page on sort change
+      showStories(1, sortBy, order);
+    });
+  }
+  
+  window.addEventListener("resize", () => {
+    if (currentView === "cards") {
+      showStories(1, currentSortBy, currentOrder);
+    }
+  });
   storiesDiv.addEventListener("click", (e) => {
     if (inputEnabled && e.target.nodeName === "BUTTON") {
       if (e.target === addStory) {
@@ -65,14 +80,24 @@ export const handleStories = () => {
 };
 
 let currentPage = 1;
-const limit = 5;
+let currentSortBy = 'date';
+let currentOrder = 'desc';
 
-export const showStories = async (page = 1) => {
+export const showStories = async (page = 1, sortBy = 'date', order = 'desc') => {
   try {
     enableInput(false);
     currentPage = page;
+    currentSortBy = sortBy;
+    currentOrder = order;
+    let limit = 5;
 
-    const response = await fetch(`/api/v1/stories?page=${currentPage}&limit=${limit}`, {
+    const storiesPerRow = () => {
+      const estimatedCardWidth = 280; // average card width incl. gap
+      const containerWidth = storiesContainer.offsetWidth;
+      return Math.max(1, Math.floor(containerWidth / estimatedCardWidth));
+    };
+    
+    const response = await fetch(`/api/v1/stories?page=${currentPage}&limit=${limit}&sortBy=${sortBy}&order=${order}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -189,17 +214,14 @@ function createStoryCard(story) {
   card.innerHTML = `
     <div class="card-header">
       <img src="${story.imageUrl || 'img/default.png'}" class="story-image" alt="Story image"/>
+      <div class="favorite-icon ${story.isFavorite ? 'favorite' : ''}">
+        ${story.isFavorite ? '❤️' : '🤍'}
+      </div>
       ${tagSpans}
-      <h3 class="story-title">${truncateText(story.title, 40)}</h3>
+      <h3 class="story-title">${truncateText(story.title, 35)}</h3>
     </div>
     <p class="story-description">${truncateText(story.description, 90)}</p>
-    <p class="story-tags">${
-      Array.isArray(story.tags)
-        ? story.tags.join(", ")
-        : story.tags}
-    </p>
     <p class="story-date">${formatDate(story.storyDate)}</p>
-    <p class="story-favorite">Favorite: ${story.isFavorite ? "Yes" : "No"}</p>
     <div class="story-actions">
       <button class="editButton" data-id="${story._id}">Edit</button>
       <button class="deleteButton" data-id="${story._id}">Delete</button>

@@ -8,7 +8,7 @@ let tags = null;
 let isFavorite = null;
 let addingStory = null;
 let storyDate = null;
-let uploadedImageUrl = null;
+// let uploadedImageUrl = null;
 
 export const handleAddEdit = async () => {
   addEditDiv = document.getElementById("edit-story");
@@ -29,6 +29,18 @@ export const handleAddEdit = async () => {
   const editImageBtn = document.getElementById("editImageBtn");
   const imagePreview = document.getElementById("imagePreview");
   
+  const syncTagsDisplay = () => {
+    const tagsArray = tags.value.split(",").map(tag => tag.trim()).filter(tag => tag);
+    imageTags.innerHTML = "";
+    tagsArray.forEach(tag => {
+      const tagSpan = document.createElement("span");
+      tagSpan.textContent = tag;
+      imageTags.appendChild(tagSpan);
+    });
+  };
+  
+  tags.addEventListener("input", syncTagsDisplay);
+  
   addEditDiv.addEventListener("click", async (e) => {
     if (inputEnabled && e.target.nodeName === "BUTTON") {
       if (e.target === addingStory) {
@@ -42,7 +54,9 @@ export const handleAddEdit = async () => {
           method = "PATCH";
           url = `/api/v1/stories/${storyId}`;
         }
-
+        
+        let uploadedImageUrl = imagePreview.src.includes('default.png') ? '' : imagePreview.src;
+        
         if (imageInput && imageInput.files.length > 0) {
           const formData = new FormData();
           formData.append("image", imageInput.files[0]);
@@ -98,7 +112,7 @@ export const handleAddEdit = async () => {
             isFavorite.checked = false;
             storyDate.value = "";
             addEditDiv.dataset.id = "";
-            imagePreview.src = "";
+            imagePreview.src = "img/default.png";
             imagePreview.style.display = "none";
             imageUrl = "";
             
@@ -109,7 +123,7 @@ export const handleAddEdit = async () => {
           }
         } catch (err) {
           console.error(err);
-          message.textContent = "A communication error occurred.";
+          message.textContent = "A communication error occurred. Please wait for a while and try again.";
           message.classList.add("error");
         }
         
@@ -131,19 +145,17 @@ export const handleAddEdit = async () => {
         if (!currentTags.includes(clickedTag)) {
           currentTags.push(clickedTag);
           tags.value = currentTags.join(", ");
+          syncTagsDisplay();
         }
-        // tag on image
-        const tagSpan = document.createElement("span");
-        tagSpan.textContent = clickedTag;
-        imageTags.appendChild(tagSpan);
       }
     });
     
     // Clear image and preview
     deleteImageBtn?.addEventListener("click", () => {
       document.getElementById("imageUpload").value = "";
-      imagePreview.src = "";
+      imagePreview.src = "img/default.png";
       imagePreview.style.display = "none";
+      tags.value = "";
       imageTags.innerHTML = "";
     });
 
@@ -155,6 +167,9 @@ export const handleAddEdit = async () => {
 };
 
 export const showAddEdit = async (storyId) => {
+  const imagePreview = document.getElementById("imagePreview");
+  let uploadedImageUrl = imagePreview.src.includes('default.png') ? '' : imagePreview.src;
+  
   if (!storyId) {
     title.value = "";
     description.value = "";
@@ -166,7 +181,7 @@ export const showAddEdit = async (storyId) => {
     message.textContent = "";
     uploadedImageUrl = "";
     
-    imagePreview.src = "";
+    imagePreview.src = "img/default.png";
     imagePreview.style.display = "none";
     
     setDiv(addEditDiv);
@@ -190,6 +205,7 @@ export const showAddEdit = async (storyId) => {
         title.value = data.story.title;
         description.value = data.story.description;
         tags.value = data.story.tags;
+        syncTagsDisplay();
         isFavorite.checked = data.story.isFavorite;
         storyDate.value = data.story.storyDate
           ? new Date(data.story.storyDate).toISOString().split('T')[0]
@@ -278,8 +294,23 @@ export const handleImagePreview = () => {
       };
       reader.readAsDataURL(file);
     } else {
-      imagePreview.src = "";
+      imagePreview.src = "img/default.png";
       imagePreview.style.display = "none";
     }
+  });
+};
+
+const syncTagsDisplay = () => {
+  const tagsInput = document.getElementById("tags");
+  const imageTagsContainer = document.getElementById("imageTags");
+  
+  // Clear current visual tags
+  imageTagsContainer.innerHTML = "";
+  
+  const tagsArray = tagsInput.value.split(",").map(tag => tag.trim()).filter(tag => tag);
+  tagsArray.forEach(tag => {
+    const tagSpan = document.createElement("span");
+    tagSpan.textContent = tag;
+    imageTagsContainer.appendChild(tagSpan);
   });
 };
