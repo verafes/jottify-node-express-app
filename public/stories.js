@@ -64,11 +64,15 @@ export const handleStories = () => {
   });
 };
 
-export const showStories = async () => {
+let currentPage = 1;
+const limit = 5;
+
+export const showStories = async (page = 1) => {
   try {
     enableInput(false);
+    currentPage = page;
 
-    const response = await fetch("/api/v1/stories", {
+    const response = await fetch(`/api/v1/stories?page=${currentPage}&limit=${limit}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -139,6 +143,8 @@ export const showStories = async () => {
           e.target.parentElement.remove();
         }
       });
+      renderPaginationControls(data.totalPages, data.currentPage);
+      
     } else {
       message.textContent = data.msg;
     }
@@ -148,18 +154,7 @@ export const showStories = async () => {
   }
   enableInput(true);
   setDiv(storiesDiv);
-  
-  if (currentView === 'cards') {
-    storiesContainer.style.display = 'grid';
-    storiesTable.style.display = 'none';
-    cardViewBtn.classList.add("active");
-    tableViewBtn.classList.remove("active");
-  } else {
-    storiesContainer.style.display = 'none';
-    storiesTable.style.display = 'table';
-    cardViewBtn.classList.remove("active");
-    tableViewBtn.classList.add("active");
-  }
+  updateViewMode();
 };
 
 function truncateText(text, maxLength) {
@@ -212,4 +207,36 @@ function createStoryCard(story) {
   `;
   
   return card;
+}
+
+function updateViewMode() {
+  if (currentView === 'cards') {
+    storiesContainer.style.display = 'grid';
+    storiesTable.style.display = 'none';
+    cardViewBtn.classList.add("active");
+    tableViewBtn.classList.remove("active");
+  } else {
+    storiesContainer.style.display = 'none';
+    storiesTable.style.display = 'table';
+    cardViewBtn.classList.remove("active");
+    tableViewBtn.classList.add("active");
+  }
+}
+
+function renderPaginationControls(totalPages, current) {
+  const paginationDiv = document.getElementById("pagination");
+  
+  if (!paginationDiv) {
+    paginationDiv.classList.add("pagination-controls");
+    storiesDiv.appendChild(paginationDiv);
+  }
+  
+  paginationDiv.innerHTML = "";
+    for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    if (i === current) btn.classList.add("active");
+    btn.addEventListener("click", () => showStories(i));
+    paginationDiv.appendChild(btn);
+  }
 }

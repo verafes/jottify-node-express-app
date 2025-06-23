@@ -5,10 +5,26 @@ const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
 
 const getAllStories = async (req, res) => {
-  const stories = await Story.find({ createdBy: req.user.userId }).sort(
-    "createdAt"
-  );
-  res.status(StatusCodes.OK).json({ stories, count: stories.length });
+  const { page = 1, limit = 6 } = req.query;
+  const numericPage = parseInt(page, 10);
+  const numericLimit = parseInt(limit, 10);
+  const skip = (numericPage - 1) * numericLimit;
+  
+  const totalStories = await Story.countDocuments({ createdBy: req.user.userId });
+  
+  const stories = await Story.find({ createdBy: req.user.userId })
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(numericLimit);
+  
+  const totalPages = Math.ceil(totalStories / numericLimit);
+  
+  res.status(StatusCodes.OK).json({
+    stories,
+    count: totalStories,
+    totalPages,
+    currentPage: numericPage,
+  });
 };
 
 const getStoryById = async (req, res) => {
