@@ -1,9 +1,15 @@
 /* Global Styles */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 html, body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f9f9f9;
-    margin: 0;
-    padding: 0;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -37,7 +43,7 @@ h3 {
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
-    background-image: url('img/background.jpg'); /* no-repeat top center/cover; */
+    background-image: url('img/background.jpg');
     background-repeat: no-repeat;
     background-position: top center;
     background-size: cover;
@@ -247,6 +253,8 @@ button {
     border: none;
     border-radius: 4px;
     font-size: 14px;
+    line-height: 1.2;
+    vertical-align: middle;
     cursor: pointer;
     transition: background 0.2s ease;
     text-transform: capitalize;
@@ -315,6 +323,7 @@ tr:hover {
 td.story-title {
     max-width: 15vw;
     white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 td.story-description {
@@ -326,7 +335,7 @@ td.story-description {
     text-overflow: ellipsis;
     word-break: break-word;
     white-space: normal;
-    max-height: 3.6em;
+    max-height: 4em;
 }
 
 td.story-tags {
@@ -350,11 +359,92 @@ td button {
     width: fit-content;
 }
 
+.story-actions {
+    margin-top: auto;
+}
+
+/*#stories-container {}*/
+#stories-grid {
+    display: grid; !important;
+    gap: 1rem;
+    padding: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    max-height: 80vh;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+#story-table {
+    display: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.story-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.card-header {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
 #story {
     max-width: 85vw;
     margin-left: auto;
     margin-right: auto;
+    width: 100%;
     overflow-x: auto;
+}
+
+#story h3, .view-toggle, #add-story, #logoff {
+    margin: 0.5rem;
+}
+
+/*.view-toggle {*/
+/*    margin: 1rem 1rem 0 0;*/
+/*}*/
+
+.view-toggle {
+    display: flex;
+    border-bottom: 2px solid #CF963EFF;  /* line under all tabs */
+    margin: 1rem 1rem 0 0;
+    gap: 1rem;
+}
+
+.tab-link {
+    padding: 0.25rem 1rem;
+    color: #4d21bd;
+    text-decoration: none;
+    font-weight: 600;
+    border: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    user-select: none;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.tab-link.active {
+    /*color: #320195;*/
+    border-color: #C99A5AFF;
+    border-bottom-color: #ddd; /* hide bottom border */
+    position: relative;
+    top: 2px; /* pull active tab down slightly for effect */
+    font-weight: 700;
+    background-color: #ddd;
 }
 
 #edit-story form {
@@ -450,6 +540,20 @@ td button {
     border-radius: 4px;
 }
 
+.tag-chip {
+    background: #fff;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+}
+
+.tag-remove {
+    color: red;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
 .image-buttons {
     position: absolute;
     bottom: 8px;
@@ -466,6 +570,15 @@ td button {
 td img {
     width: 40px;
     height: 50px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    margin: 0 auto;
+}
+
+.story-image {
+    width: 100%;
+    max-height: 180px;
     object-fit: cover;
     object-position: center;
     display: block;

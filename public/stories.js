@@ -12,6 +12,10 @@ import { showAddEdit, showDelete } from "./addEdit.js";
 let storiesDiv = null;
 let storiesTable = null;
 let storiesTableHeader = null;
+const storiesContainer = document.getElementById("stories-grid");
+let currentView = 'cards';
+const tableViewBtn = document.getElementById("table-view-btn");
+const cardViewBtn = document.getElementById("card-view-btn");
 
 export const handleStories = () => {
   storiesDiv = document.getElementById("story");
@@ -19,6 +23,23 @@ export const handleStories = () => {
   const addStory = document.getElementById("add-story");
   storiesTable = document.getElementById("story-table");
   storiesTableHeader = document.getElementById("story-table-header");
+  
+  // View toggle event listeners
+  tableViewBtn.addEventListener("click", () => {
+    currentView = 'table';
+    tableViewBtn.classList.add("active");
+    cardViewBtn.classList.remove("active");
+    storiesTable.style.display = "table";
+    storiesContainer.style.display = "none";
+  });
+  
+  cardViewBtn.addEventListener("click", () => {
+    currentView = 'cards';
+    cardViewBtn.classList.add("active");
+    tableViewBtn.classList.remove("active");
+    storiesTable.style.display = "none";
+    storiesContainer.style.display = "grid";
+  });
   
   storiesDiv.addEventListener("click", (e) => {
     if (inputEnabled && e.target.nodeName === "BUTTON") {
@@ -34,6 +55,7 @@ export const handleStories = () => {
         setToken(null);
         message.textContent = "You have been logged off. Until next time. Your Stories are safe!";
         storiesTable.replaceChildren([storiesTableHeader]);
+        // storiesContainer.replaceChildren(cards)
         showLoginRegister();
         document.getElementById("get-started")?.style.setProperty("display", "inline-block");
         document.getElementById("logon-register")?.style.setProperty("display", "flex");
@@ -55,44 +77,68 @@ export const showStories = async () => {
     });
 
     const data = await response.json();
+    
+    // Get tbody element inside your table
+    const tbody = storiesTable.querySelector('tbody');
+    if (!tbody) {
+      console.error("No <tbody> found inside #story-table");
+      enableInput(true);
+      return;
+    }
+    
     let children = [storiesTableHeader];
     
     // Clear tbody before inserting new rows
-    storiesTable.replaceChildren();
+    tbody.replaceChildren();
+    storiesContainer.innerHTML = '';
     
     if (response.status === 200) {
       message.classList.remove("error");
       if (data.count === 0) {
-        storiesTable.replaceChildren(...children);
-        
+        tbody.replaceChildren(...children);
+        storiesContainer.innerHTML = '<p class="no-stories">No stories found</p>';
       } else {
         let children = [];
+        
         for (let i = 0; i < data.stories.length; i++) {
+          const story = data.stories[i];
+          
+          let editButton = `<td><button type="button" class="editButton" data-id=${story._id}>edit</button></td>`;
+          let deleteButton = `<td><button type="button" class="deleteButton" data-id=${story._id}>delete</button></td>`;
+          
+          // Create table row
           let rowEntry = document.createElement("tr");
-
-          let editButton = `<td><button type="button" class="editButton" data-id=${data.stories[i]._id}>edit</button></td>`;
-          let deleteButton = `<td><button type="button" class="deleteButton" data-id=${data.stories[i]._id}>delete</button></td>`;
           let rowHTML = `
             <td>
-              <img src="${data.stories[i].imageUrl || 'img/default.png'}" alt="Thumbnail" />
+              <img src="${story.imageUrl || 'img/default.png'}" alt="Thumbnail" />
             </td>
-            <td class="story-title">${data.stories[i].title}</td>
-            <td class="story-description">${data.stories[i].description}</td>
+            <td class="story-title">${story.title}</td>
+            <td class="story-description">${story.description}</td>
             <td class="story-tags">${
-              Array.isArray(data.stories[i].tags)
-                ? data.stories[i].tags.join(", ")
-                : data.stories[i].tags
-            }</td>
-            <td class="story-date">${formatDate(data.stories[i].storyDate)}</td>
-            <td class="story-favorite">${data.stories[i].isFavorite ? "Yes" : "No"}</td>
+            Array.isArray(story.tags)
+              ? story.tags.join(", ")
+              : story.tags
+          }</td>
+            <td class="story-date">${formatDate(story.storyDate)}</td>
+            <td class="story-favorite">${story.isFavorite ? "Yes" : "No"}</td>
             ${editButton}${deleteButton}`;
-
+          
           rowEntry.innerHTML = rowHTML;
           children.push(rowEntry);
+          
+          // Card creation
+          const card = createStoryCard(story);
+          storiesContainer.appendChild(card);
         }
-        storiesTable.replaceChildren(...children);
-        
+        // update table
+        tbody.replaceChildren(...children);
       }
+      
+      storiesContainer.addEventListener("click", (e) => {
+        if (e.target.classList.contains("tag-remove")) {
+          e.target.parentElement.remove();
+        }
+      });
     } else {
       message.textContent = data.msg;
     }
@@ -102,7 +148,24 @@ export const showStories = async () => {
   }
   enableInput(true);
   setDiv(storiesDiv);
+  
+  if (currentView === 'cards') {
+    storiesContainer.style.display = 'grid';
+    storiesTable.style.display = 'none';
+    cardViewBtn.classList.add("active");
+    tableViewBtn.classList.remove("active");
+  } else {
+    storiesContainer.style.display = 'none';
+    storiesTable.style.display = 'table';
+    cardViewBtn.classList.remove("active");
+    tableViewBtn.classList.add("active");
+  }
 };
+
+function truncateText(text, maxLength) {
+  if (!text) return "";
+  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+}
 
 function formatDate(dateString) {
   if (!dateString) return "";
@@ -115,4 +178,38 @@ function formatDate(dateString) {
 
   if (isNaN(date)) return "";
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function createStoryCard(story) {
+  const card = document.createElement("div");
+  card.classList.add("story-card");
+  
+  const tagsArray = Array.isArray(story.tags) ? story.tags : [] ;
+  const tagSpans = tagsArray.length > 0
+    ? `<div class="image-tags">
+         ${tagsArray.map(tag => `<span class="tag-chip">${tag}</span>`).join('')}
+      </div>`
+    : "";
+
+  card.innerHTML = `
+    <div class="card-header">
+      <img src="${story.imageUrl || 'img/default.png'}" class="story-image" alt="Story image"/>
+      ${tagSpans}
+      <h3 class="story-title">${truncateText(story.title, 40)}</h3>
+    </div>
+    <p class="story-description">${truncateText(story.description, 90)}</p>
+    <p class="story-tags">${
+      Array.isArray(story.tags)
+        ? story.tags.join(", ")
+        : story.tags}
+    </p>
+    <p class="story-date">${formatDate(story.storyDate)}</p>
+    <p class="story-favorite">Favorite: ${story.isFavorite ? "Yes" : "No"}</p>
+    <div class="story-actions">
+      <button class="editButton" data-id="${story._id}">Edit</button>
+      <button class="deleteButton" data-id="${story._id}">Delete</button>
+    </div>
+  `;
+  
+  return card;
 }

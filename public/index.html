@@ -97,10 +97,21 @@
       </div>
       <div id="story" style="display:none;">
         <p id="story-message"></p>
-        <table id="story-table">
+
+        <!-- View toggle buttons -->
+        <div class="view-toggle">
+          <a href="#" id="card-view-btn"  class="tab-link">Card View</a>
+          <a href="#" id="table-view-btn" class="tab-link active">Table View</a>
+        </div>
           <h3>Your Personal Story Collection</h3>
+          <div id="stories-grid">
+            <!-- cards will go here -->
+          </div>
+
+        <table id="story-table">
           <thead>
             <tr id="story-table-header">
+              <th></th>
               <th class="story-title">Title</th>
               <th class="story-description">Description</th>
               <th class="story-tags">Tags</th>
@@ -122,8 +133,10 @@
             </tr>
           </tbody>
         </table>
-        <button type="button" id="add-story">Add story</button>
-        <button type="button" id="logoff">Log off</button>
+        <div class="form-actions">
+          <button type="button" id="add-story">Add story</button>
+          <button type="button" id="logoff">Log off</button>
+        </div>
       </div>
 
       <div id="edit-story" style="display:none;">
