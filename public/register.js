@@ -7,7 +7,7 @@ import {
 } from "./index.js";
 import { showLoginRegister } from "./loginRegister.js";
 import { showStories } from "./stories.js";
-import { capitalizeFullName } from './login.js';
+import { capitalizeFullName } from './utils.js';
 
 let registerDiv = null;
 let name = null;
