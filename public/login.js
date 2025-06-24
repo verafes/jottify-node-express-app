@@ -52,8 +52,10 @@ export const handleLogin = () => {
             
             email.value = "";
             password.value = "";
-
-            showStories();
+            
+            setDiv(document.getElementById("story"));
+            await showStories();
+            location.reload();
           } else {
             message.textContent = data.msg;
             message.classList.add("error");

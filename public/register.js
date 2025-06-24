@@ -60,6 +60,7 @@ export const handleRegister = () => {
               password2.value = "";
               
               await showStories();
+              location.reload();
             } else {
               message.textContent = data.msg;
               message.classList.add("error");
