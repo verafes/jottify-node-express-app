@@ -20,9 +20,12 @@ const errorHandlerMiddleware = (err, req, res, next) => {
   }
   
   if (err.code && err.code === 11000) {
-    customError.msg = `Duplicate value entered for ${Object.keys(
-      err.keyValue
-    )} field, please choose another value`;
+    const field = Object.keys(err.keyValue)[0];
+    if (field === "email") {
+      customError.msg = "This email is already registered. Please try logging in or use a different email.";
+    } else {
+      customError.msg = `Duplicate value entered for ${field} field, please choose another value`;
+    }
     customError.statusCode = StatusCodes.BAD_REQUEST;
   }
   return res.status(customError.statusCode).json({ msg: customError.msg })

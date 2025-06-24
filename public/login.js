@@ -54,11 +54,11 @@ export const handleLogin = () => {
             password.value = "";
             
             setDiv(document.getElementById("story"));
-            await showStories();
-            location.reload();
+            showStories();
           } else {
             message.textContent = data.msg;
             message.classList.add("error");
+            message.style.display = "block";
           }
         } catch (err) {
           console.error(err);

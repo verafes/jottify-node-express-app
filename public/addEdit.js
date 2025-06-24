@@ -116,10 +116,10 @@ export const handleAddEdit = async () => {
             imageUrl = "";
             
             showStories();
-            location.reload();
           } else {
             message.textContent = data.msg;
             message.classList.add("error");
+            message.style.display = "block";
           }
         } catch (err) {
           console.error(err);
@@ -133,7 +133,6 @@ export const handleAddEdit = async () => {
         message.classList.remove("error");
         message.textContent = "";
         showStories();
-        location.reload();
       }
     }
   });
@@ -230,6 +229,8 @@ export const showAddEdit = async (storyId) => {
       } else {
         message.textContent = "The story entry was not found";
         message.classList.add("error");
+        message.textContent = data.msg;
+        message.style.display = "block";
         showStories();
       }
     } catch (err) {

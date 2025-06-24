@@ -7,6 +7,7 @@ import {
 } from "./index.js";
 import { showLoginRegister } from "./loginRegister.js";
 import { showStories } from "./stories.js";
+import { capitalizeFullName } from './login.js';
 
 let registerDiv = null;
 let name = null;
@@ -48,7 +49,7 @@ export const handleRegister = () => {
             const data = await response.json();
             if (response.status === 201) {
               message.classList.remove("error");
-              message.textContent = `Registration successful.  Welcome ${data.user.name}`;
+              message.textContent = `Registration successful. Welcome ${capitalizeFullName(data.user.name)}`;
               setToken(data.token);
               
               document.getElementById("get-started")?.style.setProperty("display", "inline-block");
@@ -59,11 +60,11 @@ export const handleRegister = () => {
               password1.value = "";
               password2.value = "";
               
-              await showStories();
-              location.reload();
+              showStories();
             } else {
               message.textContent = data.msg;
               message.classList.add("error");
+              message.style.display = "block";
             }
           } catch (err) {
             console.error(err);
