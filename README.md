@@ -4,7 +4,7 @@
 
 The Jottify Story App is accessible online at: [APP DEPLOY](https://jottify-node-express-app.onrender.com/)
 
-## 🚀 Features
+## Features
 
 - User Registration and Login (JWT-based authentication)
 - Create, Edit, Delete Stories
@@ -18,9 +18,9 @@ The Jottify Story App is accessible online at: [APP DEPLOY](https://jottify-node
 - Full CRUD operations with real-time feedback
 - Secure routes for authenticated users
 
-## stack
+## Tech Stack
 - **Backend:** Node.js with Express.js
-- **Frontend:** HTML
+- **Frontend:** HTML, JavaScript
 - **Database:** MongoDB 
 - **Authentication:** JWT (JSON Web Tokens)
 - **API Documentation:** Swagger UI
@@ -53,21 +53,21 @@ To get a copy of this project running on your local machine, follow these steps:
     cd jottify-node-express-app 
 ```
 2. Install server dependencies
-```
+```bash
     npm install
 ```
-# 3. Configure environment
-```
+3. Configure environment
+```bash
     cp .env.example .env
 ```
 
 Edit .env with your credentials
 
-3. Start the servers
-```
+4. Start the servers
+```bash
     npm start or node app.js
 ```
-4. Open the app in browser. Sign Up and Write! Dream! Joy!
+5. Open the app in browser. Sign Up and Write! Dream! Joy!
 
 ## License
 
