@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Security-Policy" content="img-src 'self' data: https://res.cloudinary.com;">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jottify - My Stories</title>
+    <link rel="stylesheet" href="styles.css">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container">
+        <div class="logo">
+          <img src="./img/logo_light.png" alt="Logo" />
+          <a href="/">JOTTIFY: Jot your joy</a>
+        </div>
+        <div class="story-search">
+          <form id="story-search-form">
+            <input type="text" id="story-search-input" class="search-box" placeholder="Search stories..." />
+            <button type="submit" id="story-search-button" title="Search" aria-label="Search">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#" id="new-story">New Story</a></li>
+            <li><a href="#about" >About</a></li>
+            <li>
+              <div id="logon-register" style="display:none;">
+                <button type="button" id="logon">Login</button>
+                <button type="button" id="register">Register</button>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <p id="message"></p>
+
+    <main class="main-content">
+      <div class="hero-content">
+<!--        <h1 id="hero-title">Jottify: Dream & Create!</h1>-->
+        <h1 id="hero-title">Jottify: Jot your joy</h1>
+        <div class="inner-content">
+          <p>Turn<br> your thoughts<br> into jots.</p>
+          <button type="button" id="get-started">Get Started</button>
+        </div>
+      </div>
+      <div id="logon-div" style="display:none;">
+        <form>
+          <h3>Sign Up to Share Your Joy</h3>
+          <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" />
+          </div>
+          <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" />
+          </div>
+          <div class="form-actions">
+            <button type="button" id="logon-button">Login</button>
+            <button type="button" id="logon-cancel">Cancel</button>
+          </div>
+          <p>Do not have an account?
+            <a href="#" id="register-link">Register</a>
+          </p>
+        </form>
+      </div>
+      <div id="register-div" style="display:none;">
+        <form>
+          <h3>Log In to Your Joyful Stories</h3>
+          <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" />
+          </div>
+          <div>
+            <label for="email1">Email:</label>
+            <input type="email" id="email1" name="email" />
+          </div>
+          <div>
+            <label for="password1">Password:</label>
+            <input type="password" id="password1" />
+          </div>
+          <div>
+            <label for="password2">Verify password:</label>
+            <input type="password" id="password2" />
+          </div>
+          <div class="form-actions">
+            <button type="button" id="register-button">register</button>
+            <button type="button" id="register-cancel">cancel</button>
+          </div>
+          <p>Already have an account?
+            <a href="#" id="logon-link">Login</a>
+          </p>
+        </form>
+      </div>
+      <div id="story" style="display:none;">
+        <p id="story-message"></p>
+
+        <div class="top-controls">
+          <!-- View toggle buttons -->
+          <div class="view-toggle">
+            <a href="#" id="card-view-btn"  class="tab-link">Card View</a>
+            <a href="#" id="table-view-btn" class="tab-link active">Table View</a>
+          </div>
+          <div class="sort-container" style="margin: 10px 0;">
+            <label for="sort-select">Sort by:</label>
+            <select id="sort-select">
+              <option value="date-desc">Newest First</option>
+              <option value="date-asc">Oldest First</option>
+              <option value="title-asc">Title A–Z</option>
+              <option value="title-desc">Title Z–A</option>
+            </select>
+          </div>
+        </div>
+
+        <h3>Your Personal Story Collection</h3>
+        <div id="stories-grid">
+          <!-- cards will go here -->
+        </div>
+
+        <table id="story-table">
+          <thead>
+            <tr id="story-table-header">
+              <th></th>
+              <th class="story-title">Title</th>
+              <th class="story-description">Description</th>
+              <th class="story-tags">Tags</th>
+              <th class="story-date">StoryDate</th>
+              <th class="favorite">Favorite</th>
+              <th class="edit-btn">Edit</th>
+              <th class="edit-btn">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="story-title">Sample Title</td>
+              <td class="story-description">Sample description here</td>
+              <td class="story-tags">fun, adventure</td>
+              <td class="story-date">May 20, 2025</td>
+              <td class="favorite">Yes</td>
+              <td><button class="edit-btn">Edit</button></td>
+              <td><button class="edit-btn">Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="pagination" class="pagination-controls"></div>
+        <div class="form-actions">
+          <button type="button" id="add-story">Add story</button>
+          <button type="button" id="logoff">Log off</button>
+        </div>
+      </div>
+
+      <div id="edit-story" style="display:none;">
+        <form>
+          <h3>Write Your Story</h3>
+          <div class="image-column">
+            <label for="imageUpload">Story Image:</label>
+            <input type="file" id="imageUpload" accept="image/*" />
+            <div class="image-preview-container">
+              <img id="imagePreview" alt="Preview" />
+              <div class="image-tags" id="imageTags"></div>
+              <div class="image-buttons">
+                <button type="button" id="editImageBtn">Edit</button>
+                <button type="button" id="deleteImageBtn">Delete</button>
+              </div>
+            </div>
+            <div>
+              <label for="tags">Tags (comma separated):</label>
+              <input type="text" id="tags" placeholder="e.g., fun, adventure, memory" />
+              <p id="tag-hints">
+                Suggested tags:
+                <span class="tag-hint">lifestory</span>,
+                <span class="tag-hint">memory</span>,
+                <span class="tag-hint">family</span>,
+                <span class="tag-hint">childhood</span>,
+                <span class="tag-hint">home</span>,
+                <span class="tag-hint">vacation</span>,
+                <span class="tag-hint">travel</span>,
+                <span class="tag-hint">adventure</span>,
+                <span class="tag-hint">dream</span>,
+                <span class="tag-hint">fun</span>,
+                <span class="tag-hint">work</span>,
+                <span class="tag-hint">school</span>,
+                <span class="tag-hint">friends</span>,
+                <span class="tag-hint">pets</span>,
+                <span class="tag-hint">hobby</span>,
+                <span class="tag-hint">health</span>,
+                <span class="tag-hint">inspiring</span>,
+                <span class="tag-hint">celebrate</span>,
+                <span class="tag-hint">achievement</span>
+              </p>
+            </div>
+          </div>
+          <div class="form-column">
+            <div>
+              <label for="storyTitle">Title:</label>
+              <input type="text" id="storyTitle" />
+            </div>
+            <div>
+              <label for="description">Description:</label>
+              <textarea id="description" rows="9" placeholder="Write your story here..."></textarea>
+            </div>
+            <div>
+              <label for="favorite">Favorite:</label>
+              <input type="checkbox" id="favorite" />
+            </div>
+            <div>
+              <label for="story-date">Date:</label>
+              <input type="date" id="story-date" />
+            </div>
+            <div class="form-actions">
+              <button type="button" id="adding-story">add</button>
+              <button type="button" id="edit-cancel">cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+    <script src="./index.js" type="module"></script>
+    <footer>
+      <p>Jottify © 2025 Vera Fesianava</p>
+      <div class="socials">
+        <a href="https://github.com/verafes" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://linkedin.com/in/verafes" target="_blank"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </footer>
+  </body>
+</html>
