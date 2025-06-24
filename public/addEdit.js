@@ -116,6 +116,7 @@ export const handleAddEdit = async () => {
             imageUrl = "";
             
             showStories();
+            location.reload();
           } else {
             message.textContent = data.msg;
             message.classList.add("error");
@@ -132,6 +133,7 @@ export const handleAddEdit = async () => {
         message.classList.remove("error");
         message.textContent = "";
         showStories();
+        location.reload();
       }
     }
   });

@@ -2,6 +2,8 @@
 
 **Objective**: Build a full-stack Story App where users can sign up, log in, and create personal stories (diary, travel, fictional, learning stories or any topic) with support for image uploads, story metadata (date, tags), and features like search, filtering by date, pinning favorites, and editing/deleting stories.
 
+The Jottify Story App is accessible online at: [APP DEPLOY](https://jottify-node-express-app.onrender.com/)
+
 ## 🚀 Features
 
 - User Registration and Login (JWT-based authentication)
@@ -28,7 +30,7 @@
 - **Security:** Helmet / xss-clean / express-rate-limit
 - **Deployment/Hosting:** Render
 - **Version Control:** Git & GitHub
-- 
+
 ## API Documentation
 After starting the backend, visit endpoint `/docs`
 
@@ -65,7 +67,7 @@ Edit .env with your credentials
 ```
     npm start or node app.js
 ```
-4. Open the app in browser.
+4. Open the app in browser. Sign Up and Write! Dream! Joy!
 
 ## License
 
