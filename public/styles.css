@@ -57,7 +57,7 @@ h3 {
 }
 
 .hero-content {
-    margin-top: clamp(3em, calc(10em + 4vw), 15em);
+    margin-top: clamp(3em, calc(10em + 4vw), 14em);
     margin-left: 2em;
     margin-right: 1em;
 
@@ -196,7 +196,6 @@ form {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     max-width: 25rem;
-    /*max-width: min(90vw, 25rem);*/
     margin-bottom: 1rem;
 }
 
@@ -262,7 +261,7 @@ button {
 }
 
 button:hover {
-    background-color: #4722a6; /* #016565; */
+    background-color: #4722a6;
 }
 
 /* Tag Hints */
@@ -621,12 +620,18 @@ td img {
     background-color: white;
     cursor: pointer;
     border-radius: 6px;
+    font-weight: bold;
+    color: #6d43d8;
 }
 
 .pagination-controls button.active {
     background-color: #6d43d8;
     color: white;
     font-weight: bold;
+}
+
+.pagination-controls button:hover {
+    background: #C99A5AFF;
 }
 
 .top-controls {

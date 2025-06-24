@@ -43,7 +43,8 @@ export const handleLogin = () => {
           const data = await response.json();
           if (response.status === 200) {
             message.classList.remove("error");
-            message.textContent = `Login successful. Welcome back ${data.user.name}`;
+            const capitalizedName = capitalizeFullName(data.user.name);
+            message.textContent = `Login successful. Welcome back ${capitalizedName}`;
             setToken(data.token);
             
             document.getElementById("get-started")?.style.setProperty("display", "none");
@@ -91,3 +92,11 @@ export const showLogin = () => {
   password.value = null;
   setDiv(loginDiv);
 };
+
+function capitalizeFullName(name) {
+  if (!name) return '';
+  return name
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}

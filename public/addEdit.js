@@ -8,7 +8,6 @@ let tags = null;
 let isFavorite = null;
 let addingStory = null;
 let storyDate = null;
-// let uploadedImageUrl = null;
 
 export const handleAddEdit = async () => {
   addEditDiv = document.getElementById("edit-story");
