@@ -1,0 +1,332 @@
+openapi: 3.0.0
+info:
+  title: CTD Story API
+  description: |- 
+    This is a sample Story App Server based on the OpenAPI 3.0 specification
+  contact: {}
+  version: '1.0'
+servers:
+  - url: https://vf-06-jobs-api.onrender.com/api/v1
+    variables: {}
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/RegisterUserRequest'
+                - example:
+                    name: User
+                    email: user@example.com
+                    password: secret1S%
+              example:
+                name: User
+                email: user@example.com
+                password: secret1S%
+        required: true
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Bad request (invalid input)
+
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login user
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/LoginUserRequest'
+                - example:
+                    email: user@example.com
+                    password: secret1S%
+            example:
+              email: user@example.com
+              password: secret1S%
+        required: true
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: "User"
+                  token:
+                    type: string
+                    description: JWT token for authentication
+        '401':
+          description: Unauthorized (invalid credentials)
+      security: []
+
+  /stories:
+    get:
+      tags:
+        - Stories
+      summary: Get all stories
+      operationId: getAllStories
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of stories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StoryResponse'
+        '401':
+          description: Unauthorized (missing/invalid token)
+    post:
+      tags:
+        - Stories
+      summary: Create a new story
+      operationId: createStory
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateStoryRequest'
+        required: true
+      responses:
+        '201':
+          description: Story created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponse'
+        '400':
+          description: Bad request (invalid input)
+        '401':
+          description: Unauthorized (missing/invalid token)
+
+  /stories/{id}:
+    get:
+      tags:
+        - Stories
+      summary: Get a story by ID
+      operationId: getStoryById
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Story details
+          content:
+            application/json:
+              schema:
+                properties:
+                  allOf:
+                    $ref: '#/components/schemas/StoryResponse'
+        '404':
+          description: Story not found
+        '401':
+          description: Unauthorized (missing/invalid token)
+
+    patch:
+      tags:
+        - Stories
+      summary: Update a story
+      operationId: updateStory
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      requestBody:
+        description: ''
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStoryRequest'
+            example:
+                title: My New Story
+                description: This is the content of my story
+                tags: [ "fun", "adventure" ]
+                isFavorite: true
+                storyDate: "2023-05-01T12:00:00Z"
+                imageUrl: "https://example.com/story-image.jpg"
+      responses:
+        '200':
+          description: Story updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponse'
+        '400':
+          description: Bad request (invalid input)
+        '401':
+          description: Unauthorized (missing/invalid token)
+        '404':
+          description: Story not found
+
+    delete:
+      tags:
+        - Stories
+      summary: Delete a story
+      operationId: deleteStory
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Story deleted successfully
+        '401':
+          description: Unauthorized (missing/invalid token)
+        '404':
+          description: Story not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    RegisterUserRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        name: User
+        email: user@example.com
+        password: secret1S%
+    LoginUserRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: user@example.com
+        password: secret1S%
+
+    # For POST/PATCH requests
+    CreateStoryRequest:
+      type: object
+      required:
+        - title
+        - description
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        isFavorite:
+          type: boolean
+          default: false
+        storyDate:
+          type: string
+          format: date-time
+        imageUrl:
+          type: string
+      example:
+        title: My New Story
+        description: This is the content of my story
+        tags: ["fun", "adventure"]
+        isFavorite: false
+        storyDate: "2023-05-01T12:00:00Z"
+        imageUrl: "https://example.com/story-image.jpg"
+
+    # For all stories responses
+    StoryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+          example: My Story
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        isFavorite:
+          type: boolean
+          example: false
+        imageUrl:
+          type: string
+        storyDate:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      example:
+        id: "507f1f77bcf86cd799439011"
+        title: My New Story
+        description: This is the content of my story
+        tags: [ "memory", "adventure" ]
+        isFavorite: false
+        createdBy: "6827b4de39108b5e9cb29be0"
+        storyDate: "2023-05-01T12:00:00Z"
+        imageUrl: "https://example.com/story-image.jpg"
+        createdAt: "2025-05-18T01:22:23.854Z"
+        updatedAt: "2025-05-18T01:22:23.854Z"
+security: []
+tags:
+  - name: Auth
+    description: User authentication
+  - name: Stories
+    description: Story management (requires authentication)

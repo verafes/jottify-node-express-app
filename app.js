@@ -22,6 +22,10 @@ const authRouter = require("./routes/auth");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
+const swaggerUI = require("swagger-ui-express");
+const YAML = require("yamljs");
+const swaggerDoc = YAML.load("./swagger.yaml");
+
 const app = express();
 app.use(express.json());
 app.set("trust proxy", 1);
@@ -52,6 +56,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(favicon(path.join(__dirname, "public/img", "favicon.ico")));
 app.use(logger("dev"));
 
+app.get("/", (req, res) => {
+  res.send("<h1>Products api</h1> <a href='/docs'>Documentation</a>");
+});
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/stories", authenticateUser, storiesRouter);
 
