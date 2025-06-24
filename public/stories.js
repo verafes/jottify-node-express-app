@@ -13,7 +13,7 @@ let storiesDiv = null;
 let storiesTable = null;
 let storiesTableHeader = null;
 const storiesContainer = document.getElementById("stories-grid");
-let currentView = 'cards';
+let currentView = 'table';
 const tableViewBtn = document.getElementById("table-view-btn");
 const cardViewBtn = document.getElementById("card-view-btn");
 
@@ -24,6 +24,36 @@ export const handleStories = () => {
   storiesTable = document.getElementById("story-table");
   storiesTableHeader = document.getElementById("story-table-header");
   
+  const searchButton = document.getElementById("story-search-button");
+  const searchForm = document.getElementById("story-search-form");
+  if (searchForm) {
+    searchForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const query = searchInput.value.toLowerCase();
+      filterStories(query);
+    });
+  }
+  if (searchButton) {
+    searchButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (window.noResultsTimeout) {
+        clearTimeout(window.noResultsTimeout);
+        window.noResultsTimeout = null;
+      }
+      message.textContent = "";
+      message.classList.remove("error");
+      message.style.display = "none";
+      const query = searchInput.value.toLowerCase();
+      filterStories(query);
+    });
+  }
+  
+  const searchInput = document.getElementById("story-search-input");
+  searchInput.addEventListener("input", (e) => {
+    const query = e.target.value.toLowerCase();
+    filterStories(query);
+  });
+
   // View toggle event listeners
   tableViewBtn.addEventListener("click", () => {
     currentView = 'table';
@@ -31,6 +61,7 @@ export const handleStories = () => {
     cardViewBtn.classList.remove("active");
     storiesTable.style.display = "table";
     storiesContainer.style.display = "none";
+    showStories(1, currentSortBy, currentOrder);
   });
   
   cardViewBtn.addEventListener("click", () => {
@@ -39,6 +70,7 @@ export const handleStories = () => {
     tableViewBtn.classList.remove("active");
     storiesTable.style.display = "none";
     storiesContainer.style.display = "grid";
+    showStories(1, currentSortBy, currentOrder);
   });
   
   // Sort dropdown
@@ -70,14 +102,18 @@ export const handleStories = () => {
         setToken(null);
         message.textContent = "You have been logged off. Until next time. Your Stories are safe!";
         storiesTable.replaceChildren([storiesTableHeader]);
-        // storiesContainer.replaceChildren(cards)
+        
+        document.getElementById("story-search-input").value = "";
+        message.textContent = "";
+        message.style.display = "none";
+        
         showLoginRegister();
         document.getElementById("get-started")?.style.setProperty("display", "inline-block");
         document.getElementById("logon-register")?.style.setProperty("display", "flex");
       }
     }
   });
-};
+}
 
 let currentPage = 1;
 let currentSortBy = 'date';
@@ -89,13 +125,16 @@ export const showStories = async (page = 1, sortBy = 'date', order = 'desc') => 
     currentPage = page;
     currentSortBy = sortBy;
     currentOrder = order;
-    let limit = 5;
 
-    const storiesPerRow = () => {
-      const estimatedCardWidth = 280; // average card width incl. gap
-      const containerWidth = storiesContainer.offsetWidth;
-      return Math.max(1, Math.floor(containerWidth / estimatedCardWidth));
-    };
+    let limit;
+    if (currentView === 'cards') {
+      // calculate how many cards fit in one row based on window width
+      const calculatedLimit = storiesPerRow();
+      limit = Math.max(1, calculatedLimit);
+      limit = Math.min(limit, 10);
+    } else {
+      limit = 5
+    }
     
     const response = await fetch(`/api/v1/stories?page=${currentPage}&limit=${limit}&sortBy=${sortBy}&order=${order}`, {
       method: "GET",
@@ -107,7 +146,6 @@ export const showStories = async (page = 1, sortBy = 'date', order = 'desc') => 
 
     const data = await response.json();
     
-    // Get tbody element inside your table
     const tbody = storiesTable.querySelector('tbody');
     if (!tbody) {
       console.error("No <tbody> found inside #story-table");
@@ -260,5 +298,58 @@ function renderPaginationControls(totalPages, current) {
     if (i === current) btn.classList.add("active");
     btn.addEventListener("click", () => showStories(i));
     paginationDiv.appendChild(btn);
+  }
+}
+
+const storiesPerRow = () => {
+  const estimatedCardWidth = 280; // max 370
+  const containerWidth = storiesContainer.offsetWidth;
+  return Math.max(1, Math.floor(containerWidth / estimatedCardWidth));
+};
+
+function filterStories(query) {
+  if (!query && query !== "") return;
+  
+  if (window.noResultsTimeout) {
+    clearTimeout(window.noResultsTimeout);
+    window.noResultsTimeout = null;
+  }
+  message.textContent = "";
+  message.classList.remove("error");
+  message.style.display = "none";
+  
+  const storyCards = document.querySelectorAll("#stories-container .story-card");
+  const storyRows = document.querySelectorAll("#story-table tbody tr");
+  
+  let visibleCount = 0;
+  
+  storyCards.forEach(card => {
+    const text = card.innerText.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = "flex";
+      visibleCount++;
+    } else {
+      card.style.display = "none";
+    }
+  });
+  
+  storyRows.forEach(row => {
+    const text = row.innerText.toLowerCase();
+    if (text.includes(query)) {
+      row.style.display = "table-row";
+      visibleCount++;
+    } else {
+      row.style.display = "none";
+    }
+  });
+  
+  console.log("Filtering with query:", query);
+  console.log("Story cards found:", storyCards.length);
+  console.log("Story rows found:", storyRows.length);
+  
+  if (query.trim() && visibleCount === 0) {
+    message.textContent = "No stories found matching your search.";
+    message.classList.add("error")
+    message.style.display = "block";
   }
 }

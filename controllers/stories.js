@@ -5,15 +5,23 @@ const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
 
 const getAllStories = async (req, res) => {
-  const { page = 1, limit = 6 } = req.query;
+  const { page = 1, limit = 6, sortBy = 'date', order = 'desc' } = req.query;
   const numericPage = parseInt(page, 10);
   const numericLimit = parseInt(limit, 10);
   const skip = (numericPage - 1) * numericLimit;
   
+  const sortOptions = {
+    title: 'title',
+    date: 'storyDate',
+  };
+  
+  const sortField = sortOptions[sortBy] || 'storyDate';
+  const sortOrder = order === 'asc' ? 1 : -1;
+  
   const totalStories = await Story.countDocuments({ createdBy: req.user.userId });
   
   const stories = await Story.find({ createdBy: req.user.userId })
-    .sort({ createdAt: -1 })
+    .sort({ [sortField]: sortOrder })
     .skip(skip)
     .limit(numericLimit);
   

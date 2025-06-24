@@ -21,7 +21,6 @@ header, footer {
 
 h1 {
     text-align: left;
-    text-align: left;
     color: #4d21bd;
     font-size: clamp(
             2.5em,
@@ -101,7 +100,6 @@ button {
 /* Header */
 header {
     height: 64px;
-    /*background: #A37123FF;*/
     background: #320195;
     color: #fff;
     padding: 0 2em;
@@ -114,6 +112,7 @@ header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    /*flex-wrap: wrap;*/
     width: 100%;
 }
 
@@ -121,6 +120,7 @@ header .container {
     display: flex;
     align-items: center;
     gap: 0.4em;
+    flex: 1 1 auto;
 }
 
 .logo img {
@@ -372,7 +372,9 @@ td button {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     max-height: 80vh;
     box-sizing: border-box;
+    align-items: flex-start;
     width: 100%;
+    overflow-y: hidden;
 }
 
 #story-table {
@@ -392,7 +394,7 @@ td button {
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     width: 100%;
-    /*max-width: 380px;*/
+    max-width: 380px;
     gap: 0.5rem;
 }
 
@@ -593,6 +595,7 @@ td img {
     padding: 0.3rem 2rem;
     background-color: #E8CCA0FF;
     text-align: center;
+    transition: opacity 0.3s ease;
     display: none;
 }
 
@@ -647,7 +650,102 @@ td img {
     color: #4d21bd;
 }
 
+/* Story search */
+.container .story-search {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+    min-width: 300px;
+    max-width: 100%;
+    width: auto;
+    flex-shrink: 0;
+}
+
+#story-search-form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;
+    background-color: transparent;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    max-width: 400px;
+    width: 100%;
+    margin: 0;
+    align-items: center;
+}
+
+#story-search-input {
+    flex: 1 1 auto;
+    min-width: 100px;
+    height: 40px;
+    font-size: 16px;
+    padding: 8px 12px;
+    background: #ededed;
+    border: 1px solid #C99A5AFF;
+}
+
+#story-search-button {
+    flex: 0 0 auto;
+    height: 40px;
+    padding: 0 16px;
+    font-size: 1.2em;
+    line-height: 1;
+    background: #6d43d8;
+}
+
+#story-search-button:hover {
+    background-color: #4722a6;
+}
+
 @media (max-width: 750px) {
+    header {
+        height: auto;
+        flex-direction: column;
+        /*padding-bottom: 1rem;*/
+        padding: 0 1rem;
+    }
+
+    header .container {
+        flex-wrap: wrap;
+        padding: 1rem 0.5rem 0 0.5rem;
+        align-items: flex-start;
+    }
+
+    .logo {
+        flex: 0 1 auto;
+        margin-bottom: 0.5rem;
+    }
+
+    nav {
+        flex: 1 1 auto;
+        display: flex;
+        /*justify-content: space-between;*/
+        justify-content: flex-end;
+        align-items: center;
+    }
+    .container .story-search {
+        padding: 0;
+    }
+    .story-search {
+        width: 100%;
+        max-width: none;
+        margin: 0 auto 0.5rem auto;
+        order: 2;
+        justify-content: flex-start;
+    }
+
+    #story-search-form {
+        width: 100%;
+    }
+
+    .story-search input {
+        width: 100%;
+    }
+
     #edit-story {
         margin-right: clamp(1em, 3vw, 2em);
         width: auto;
