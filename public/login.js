@@ -9,6 +9,7 @@ import {
 import { showLoginRegister } from "./loginRegister.js";
 import { showStories } from "./stories.js";
 import { showRegister } from "./register.js";
+import { capitalizeFullName } from './utils.js';
 
 let loginDiv = null;
 let email = null;
@@ -95,10 +96,3 @@ export const showLogin = () => {
   setDiv(loginDiv);
 };
 
-function capitalizeFullName(name) {
-  if (!name) return '';
-  return name
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
