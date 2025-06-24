@@ -162,7 +162,6 @@ export const showStories = async (page = 1, sortBy = 'date', order = 'desc') => 
     if (response.status === 200) {
       message.classList.remove("error");
       if (data.count === 0) {
-        tbody.replaceChildren(...children);
         storiesContainer.innerHTML = '<p class="no-stories">No stories found</p>';
       } else {
         let children = [];
