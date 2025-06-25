@@ -60,7 +60,13 @@ export const handleRegister = () => {
               password1.value = "";
               password2.value = "";
               
-              showStories();
+              document.getElementById("stories-grid");
+              const storiesTable = document.getElementById("story-table");
+              storiesTable.querySelector('thead');
+              storiesTable.querySelector('tbody');
+              
+              await showStories();
+              location.reload();
             } else {
               message.textContent = data.msg;
               message.classList.add("error");
