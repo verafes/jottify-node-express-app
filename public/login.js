@@ -54,8 +54,14 @@ export const handleLogin = () => {
             email.value = "";
             password.value = "";
             
+            document.getElementById("stories-grid");
+            const storiesTable = document.getElementById("story-table");
+            storiesTable.querySelector('thead');
+            storiesTable.querySelector('tbody');
+            
             setDiv(document.getElementById("story"));
             showStories();
+            location.reload();
           } else {
             message.textContent = data.msg;
             message.classList.add("error");

@@ -162,9 +162,14 @@ export const showStories = async (page = 1, sortBy = 'date', order = 'desc') => 
     if (response.status === 200) {
       message.classList.remove("error");
       if (data.count === 0) {
-        storiesContainer.innerHTML = '<p class="no-stories">No stories found</p>';
+        tbody.replaceChildren(...children);
+        let noStoryRow = document.createElement('tr');
+        noStoryRow.innerHTML  = `<td class="story-title">No stories found. Start writing Your Story</td>`
+        tbody.appendChild(noStoryRow);
+        storiesContainer.innerHTML = '<p class="no-stories">No stories found. Start writing Your Story</p>';
       } else {
         let children = [];
+        storiesContainer.innerHTML = '';
         
         for (let i = 0; i < data.stories.length; i++) {
           const story = data.stories[i];
