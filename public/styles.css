@@ -710,7 +710,6 @@ td img {
     header {
         height: auto;
         flex-direction: column;
-        /*padding-bottom: 1rem;*/
         padding: 0 1rem;
     }
 
@@ -728,7 +727,6 @@ td img {
     nav {
         flex: 1 1 auto;
         display: flex;
-        /*justify-content: space-between;*/
         justify-content: flex-end;
         align-items: center;
     }
@@ -783,6 +781,20 @@ td img {
         flex-direction: column;
     }
 
+    .image-tags {
+        display: none !important;
+    }
+
+    .image-buttons {
+        right: 0.25rem;
+        display: flex;
+        gap: 0.25rem;
+    }
+
+    .image-buttons button {
+        padding: 0.1rem 0.3rem 0.2rem 0.3rem;
+        font-size: 0.6rem;
+    }
     .form-column,
     .image-column {
         max-width: 100%; !important;
