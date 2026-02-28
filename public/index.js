@@ -34,6 +34,11 @@ import {handleRegister, showRegister} from "./register.js";
 import { showAddEdit } from "./addEdit.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+  const footerYear = document.getElementById('footer-year');
+  if (footerYear) {
+    footerYear.textContent = new Date().getFullYear();
+  }
+
   token = localStorage.getItem("token");
   message = document.getElementById("message");
   handleLoginRegister();

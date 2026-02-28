@@ -196,10 +196,22 @@ export const showStories = async (page = 1, sortBy = 'date', order = 'desc') => 
           
           rowEntry.innerHTML = rowHTML;
           children.push(rowEntry);
-          
+
+          // click on row
+          rowEntry.addEventListener("click", (e) => {
+            if (e.target.classList.contains("editButton") || e.target.classList.contains("deleteButton")) return;
+            showAddEdit(story._id);
+          });
+
           // Card creation
           const card = createStoryCard(story);
           storiesContainer.appendChild(card);
+
+          // click on card
+          card.addEventListener("click", (e) => {
+            if (e.target.classList.contains("editButton") || e.target.classList.contains("deleteButton")) return;
+            showAddEdit(story._id);
+          });
         }
         // update table
         tbody.replaceChildren(...children);
